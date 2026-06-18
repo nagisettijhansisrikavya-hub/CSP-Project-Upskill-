@@ -6,3 +6,5 @@ node_modules/
 .agents/
 
 .git_portable/
+run_server.bat
+push_project.bat
