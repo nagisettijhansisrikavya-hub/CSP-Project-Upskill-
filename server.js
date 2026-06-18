@@ -70,16 +70,16 @@ async function callGroqBackend(systemInstruction, promptText, isJson = false) {
 
 // 1. Resume Analyser Route
 app.post('/api/analyze-resume', async (req, res) => {
-  const { resumeText, role, status } = req.body;
+  const { resumeText, role, status, language } = req.body;
   if (!resumeText || !role || !status) {
     return res.status(400).json({ error: "Missing required resumeText, role, or status parameter." });
   }
 
-  const systemInstruction = "You are a professional ATS resume scanner and recruiter. Output strictly in JSON format.";
+  const systemInstruction = `You are a professional ATS resume scanner and recruiter. Output strictly in JSON format. Generate all analysis comments, optimization recommendations, and text feedback in the language: ${language || 'English'}.`;
   const prompt = `Analyze this resume for the role: ${role}. Candidate status: ${status}. 
   Resume text: "${resumeText}".
   Compute a realistic ATS score (0-100), extract a list of missing technical skills for this role, and provide 3 actionable optimization tips.
-  Output exactly in this JSON structure:
+  Output exactly in this JSON structure (keep JSON key names in English, but write the string values inside "recommendations" in the language: ${language || 'English'}):
   {
     "score": 82,
     "missingSkills": ["React", "TypeScript"],
@@ -97,15 +97,15 @@ app.post('/api/analyze-resume', async (req, res) => {
 
 // 2. Generate Interview Questions Route
 app.post('/api/generate-questions', async (req, res) => {
-  const { role, difficulty, type } = req.body;
+  const { role, difficulty, type, language } = req.body;
   if (!role || !difficulty || !type) {
     return res.status(400).json({ error: "Missing required role, difficulty, or type parameter." });
   }
 
-  const systemInstruction = "You are a professional software engineer interviewer. Generate 5 distinct interview questions. Output strictly in JSON format.";
+  const systemInstruction = `You are a professional software engineer interviewer. Generate 5 distinct interview questions. Output strictly in JSON format. Generate all question texts in the language: ${language || 'English'}.`;
   const prompt = `Generate a JSON object containing a list of 5 interview questions for a ${difficulty} ${role}. 
   The composition should be: ${type === 'technical' ? 'purely technical' : type === 'general' ? 'purely behavioral/HR' : 'mix of technical and behavioral'}.
-  Return the questions in the following JSON format:
+  Return the questions in the following JSON format (keep JSON key names like "questions" and "question" in English, but write the question text values in the language: ${language || 'English'}):
   {
     "questions": [
       { "question": "Question 1 text here" },
@@ -147,17 +147,17 @@ app.post('/api/generate-questions', async (req, res) => {
 
 // 3. Evaluate Interview Answers Route
 app.post('/api/evaluate-interview', async (req, res) => {
-  const { role, difficulty, questions, answers } = req.body;
+  const { role, difficulty, questions, answers, language } = req.body;
   if (!role || !difficulty || !questions || !answers) {
     return res.status(400).json({ error: "Missing required role, difficulty, questions, or answers parameter." });
   }
 
   const qnA = questions.map((q, idx) => `Q: ${q}\nA: ${answers[idx]}`).join("\n\n");
-  const systemInstruction = "You are an expert tech interviewer and communication coach. Output strictly in JSON format.";
+  const systemInstruction = `You are an expert tech interviewer and communication coach. Output strictly in JSON format. Generate all feedback summaries, correctness critiques, model answers, and textual remarks in the language: ${language || 'English'}.`;
   const prompt = `Evaluate the candidate's answers below for the role: ${role} at difficulty: ${difficulty}. 
   ${qnA}
   Provide an overall percentage score (0-100), overall remarks summary, and a list containing a breakdown of correctness evaluation and a model answer suggestions for each of the 5 questions.
-  Output exactly in this JSON format structure:
+  Output exactly in this JSON format structure (keep JSON keys like "score", "summary", "breakdown", "question", "answer", "correctness", "modelAnswer" in English, but write the string values of "summary", "correctness", and "modelAnswer" in the language: ${language || 'English'}):
   {
     "score": 85,
     "summary": "Overall summary feedback text here...",
@@ -177,12 +177,12 @@ app.post('/api/evaluate-interview', async (req, res) => {
 
 // 4. AI Mentor Chat Route
 app.post('/api/mentor-chat', async (req, res) => {
-  const { message } = req.body;
+  const { message, language } = req.body;
   if (!message) {
     return res.status(400).json({ error: "Missing required message parameter." });
   }
 
-  const systemInstruction = "You are UpSkill AI Mentor, a highly knowledgeable career consultant and coder mentor. Guide the user with specific resources, career strategy advice, and engineering methodologies. Use formatting and markdown where appropriate.";
+  const systemInstruction = `You are UpSkill AI Mentor, a highly knowledgeable career consultant and coder mentor. Guide the user with specific resources, career strategy advice, and engineering methodologies. Use formatting and markdown where appropriate. Always respond in the language: ${language || 'English'}.`;
   const prompt = `User states: "${message}"`;
 
   try {

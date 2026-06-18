@@ -331,7 +331,226 @@ if (mobileToggle && sidebarOverlay) {
 // GEMINI API UTILITIES
 // ==========================================
 
+let currentLanguage = localStorage.getItem("upskill_lang") || "en";
+
+const translations = {
+  en: {
+    dashboard_title: "Dashboard",
+    nav_dashboard: "Dashboard",
+    nav_analyser: "Resume Analyser",
+    nav_learn: "Roadmap & Learn",
+    nav_interview: "Mock Interviews",
+    nav_internships: "Internships",
+    nav_govt_schemes: "Govt Schemes",
+    nav_mentor: "Mentor",
+    welcome_back: "Welcome Back,",
+    welcome_subtitle: "Track your learning, analyze resumes, practice mock interviews, and land top opportunities using AI-driven coaching.",
+    last_ats_score: "Last ATS Resume Score",
+    roadmap_progress: "Roadmap Progress",
+    interviews_done: "Interviews Done",
+    recent_activity: "Recent Activity",
+    account_created: "Account Created",
+    just_now: "Just now",
+    upload_resume: "Upload Resume",
+    resume_subtitle: "We'll run an ATS check for your desired role, identify key missing skills, and compile a roadmap.",
+    aimed_role: "AIMED JOB ROLE",
+    current_status: "CURRENT STATUS",
+    resume_content: "RESUME CONTENT",
+    drag_drop: "Drag & Drop Resume File",
+    or_click: "or click to upload",
+    supports_format: "Supports PDF, DOCX, TXT (Simulated upload)",
+    or_paste: "— OR PASTE TEXT DIRECTLY —",
+    paste_resume_placeholder: "Paste your resume contents, text bio, project history, and experience here...",
+    start_analysis: "Start AI Analysis",
+    analyser_placeholder_text: "Fill out the resume details and trigger the analysis to view your ATS grading, missing skills, and detailed career feedback.",
+    analyzing_resume_text: "Analyzing resume against role profiles...",
+    connecting_ai: "Connecting to Secure Groq Server...",
+    analysis_complete: "Analysis Complete",
+    ats_score_label: "ATS SCORE",
+    missing_skills: "Missing Required Skills",
+    opt_recs: "Optimization Recommendations",
+    gen_roadmap: "Generate Personalized Roadmap",
+    learning_hub: "Curated Learning Hub",
+    interview_lobby: "AI Mock Interview Lobby",
+    interview_subtitle: "Practice general and technical interview questions tailored for your desired job role. Receive live feedback and a communication/technical assessment.",
+    interview_target: "INTERVIEW JOB TARGET",
+    question_comp: "QUESTION COMPOSITION",
+    difficulty_level: "DIFFICULTY LEVEL",
+    begin_simulation: "Begin AI Simulation",
+    type_response: "Type your response or click the microphone to speak...",
+    ask_question_placeholder: "Type your question here...",
+    send: "Send"
+  },
+  hi: {
+    dashboard_title: "डैशबोर्ड",
+    nav_dashboard: "डैशबोर्ड",
+    nav_analyser: "रिज्यूमे विश्लेषक",
+    nav_learn: "रोडमैप और सीखें",
+    nav_interview: "मॉक इंटरव्यू",
+    nav_internships: "इंटर्नशिप",
+    nav_govt_schemes: "सरकारी योजनाएं",
+    nav_mentor: "एआई मेंटर",
+    welcome_back: "स्वागत है वापस,",
+    welcome_subtitle: "एआई-संचालित कोचिंग का उपयोग करके अपनी सीख को ट्रैक करें, रिज्यूमे का विश्लेषण करें, मॉक इंटरव्यू का अभ्यास करें और शीर्ष अवसर प्राप्त करें।",
+    last_ats_score: "अंतिम एटीएस रिज्यूमे स्कोर",
+    roadmap_progress: "रोडमैप प्रगति",
+    interviews_done: "इंटरव्यू पूरे हुए",
+    recent_activity: "हाल की गतिविधि",
+    account_created: "खाता बनाया गया",
+    just_now: "अभी-अभी",
+    upload_resume: "रिज्यूमे अपलोड करें",
+    resume_subtitle: "हम आपकी पसंदीदा भूमिका के लिए एक एटीएस जांच चलाएंगे, महत्वपूर्ण गुम कौशल की पहचान करेंगे और एक रोडमैप तैयार करेंगे।",
+    aimed_role: "लक्षित नौकरी की भूमिका",
+    current_status: "वर्तमान स्थिति",
+    resume_content: "रिज्यूमे सामग्री",
+    drag_drop: "रिज्यूमे फ़ाइल खींचें और छोड़ें",
+    or_click: "या अपलोड करने के लिए क्लिक करें",
+    supports_format: "PDF, DOCX, TXT का समर्थन करता है (सिम्युलेटेड अपलोड)",
+    or_paste: "— या सीधे पाठ पेस्ट करें —",
+    paste_resume_placeholder: "अपनी रिज्यूमे सामग्री, पाठ जीवनी, परियोजना इतिहास और अनुभव यहाँ पेस्ट करें...",
+    start_analysis: "एआई विश्लेषण शुरू करें",
+    analyser_placeholder_text: "एटीएस ग्रेडिंग, लापता कौशल और विस्तृत करियर प्रतिक्रिया देखने के लिए रिज्यूमे विवरण भरें और विश्लेषण ट्रिगर करें।",
+    analyzing_resume_text: "भूमिका प्रोफाइल के खिलाफ रिज्यूमे का विश्लेषण...",
+    connecting_ai: "सुरक्षित ग्रोम एआई इंजन से कनेक्ट किया जा रहा है...",
+    analysis_complete: "विश्लेषण पूर्ण",
+    ats_score_label: "एटीएस स्कोर",
+    missing_skills: "लापता आवश्यक कौशल",
+    opt_recs: "अनुकूलन सिफारिशें",
+    gen_roadmap: "व्यक्तिगत रोडमैप बनाएं",
+    learning_hub: "क्यूरेटेड लर्निंग हब",
+    interview_lobby: "एआई मॉक इंटरव्यू लॉबी",
+    interview_subtitle: "अपनी लक्षित नौकरी की भूमिका के अनुरूप सामान्य और तकनीकी साक्षात्कार प्रश्नों का अभ्यास करें। लाइव प्रतिक्रिया और संचार/तकनीकी मूल्यांकन प्राप्त करें।",
+    interview_target: "साक्षात्कार नौकरी लक्ष्य",
+    question_comp: "प्रश्न संरचना",
+    difficulty_level: "कठिनाई स्तर",
+    begin_simulation: "एआई सिमुलेशन शुरू करें",
+    type_response: "अपना उत्तर टाइप करें या बोलने के लिए माइक्रोफ़ोन पर क्लिक करें...",
+    ask_question_placeholder: "अपना प्रश्न यहाँ टाइप करें...",
+    send: "भेजें"
+  },
+  te: {
+    dashboard_title: "డాష్‌బోర్డ్",
+    nav_dashboard: "డాష్‌బోర్డ్",
+    nav_analyser: "రెజ్యూమే విశ్లేషకుడు",
+    nav_learn: "రోడ్‌మ్యాప్ & నేర్చుకోండి",
+    nav_interview: "మాక్ ఇంటర్వ్యూలు",
+    nav_internships: "ఇంటర్న్‌షిప్‌లు",
+    nav_govt_schemes: "ప్రభుత్వ పథకాలు",
+    nav_mentor: "మెంటర్",
+    welcome_back: "స్వాగతం,",
+    welcome_subtitle: "AI-ఆధారిత కోచింగ్‌ను ఉపయోగించి మీ అభ్యాసాన్ని ట్రాక్ చేయండి, రెజ్యూమేలను విశ్లేషించండి, మాక్ ఇంటర్వ్యూలను ప్రాక్టీస్ చేయండి మరియు అగ్ర అవకాశాలను పొందండి.",
+    last_ats_score: "చివరి ATS రెజ్యూమే స్కోర్",
+    roadmap_progress: "రోడ్‌మ్యాప్ పురోగతి",
+    interviews_done: "ఇంటర్వ్యూలు పూర్తయ్యాయి",
+    recent_activity: "ఇటీవలి కార్యాచరణ",
+    account_created: "ఖాతా సృష్టించబడింది",
+    just_now: "ఇప్పుడే",
+    upload_resume: "రెజ్యూమే అప్‌లోడ్ చేయండి",
+    resume_subtitle: "మేము మీ కావలసిన పాత్ర కోసం ATS తనిఖీని రన్ చేస్తాము, కీలకమైన తప్పిపోయిన నైపుణ్యాలను గుర్తిస్తాము మరియు రోడ్‌మ్యాప్‌ను కంపైల్ చేస్తాము.",
+    aimed_role: "లక్ష్యంగా ఉన్న ఉద్యోగ పాత్ర",
+    current_status: "ప్రస్తుత స్థితి",
+    resume_content: "రెజ్యూమే కంటెంట్",
+    drag_drop: "రెజ్యూమే ఫైల్‌ను లాగి వదలండి",
+    or_click: "లేదా అప్‌లోడ్ చేయడానికి క్లిక్ చేయండి",
+    supports_format: "PDF, DOCX, TXTకి మద్దతు ఇస్తుంది (సిమ్యులేటెడ్ అప్‌లోడ్)",
+    or_paste: "— లేదా నేరుగా టెక్స్ట్‌ని పేస్ట్ చేయండి —",
+    paste_resume_placeholder: "మీ రెజ్యూమే విషయాలు, బయో, ప్రాజెక్ట్ చరిత్ర మరియు అనుభవాన్ని ఇక్కడ పేస్ట్ చేయండి...",
+    start_analysis: "AI విశ్లేషణను ప్రారంభించండి",
+    analyser_placeholder_text: "మీ ATS గ్రేడింగ్, తప్పిపోయిన నైపుణ్యాలు మరియు వివరణాత్మక కెరీర్ ఫీడ్‌బ్యాక్ చూడటానికి రెజ్యూమే వివరాలను పూరించి, విశ్లేషణను ప్రారంభించండి.",
+    analyzing_resume_text: "రెజ్యూమే విశ్లేషణ జరుగుతోంది...",
+    connecting_ai: "AI ఇంజిన్‌కు కనెక్ట్ అవుతోంది...",
+    analysis_complete: "విశ్లేషణ పూర్తయింది",
+    ats_score_label: "ATS స్కోర్",
+    missing_skills: "తప్పిపోయిన అవసరమైన నైపుణ్యాలు",
+    opt_recs: "ఆప్టిమైజేషన్ సిఫార్సులు",
+    gen_roadmap: "వ్యక్తిగతీకరించిన రోడ్‌మ్యాప్‌ను రూపొందించండి",
+    learning_hub: "క్యూరేటెడ్ లెర్నింగ్ హబ్",
+    interview_lobby: "AI మాక్ ఇంటర్వ్యూ లాబీ",
+    interview_subtitle: "మీరు కోరుకున్న ఉద్యోగ పాత్రకు తగినట్లుగా సాధారణ మరియు సాంకేతిక ఇంటర్వ్యూ ప్రశ్నలను ప్రాక్టీస్ చేయండి. ప్రత్యక్ష అభిప్రాయాన్ని మరియు కమ్యూనికేషన్/సాంకేతిక అంచనాను పొందండి.",
+    interview_target: "ఇంటర్వ్యూ ఉద్యోగ లక్ష్యం",
+    question_comp: "ప్రశ్నల కూర్పు",
+    difficulty_level: "కఠినత స్థాయి",
+    begin_simulation: "AI సిమ్యులేషన్ ప్రారంభించండి",
+    type_response: "మీ సమాధానాన్ని టైప్ చేయండి లేదా మాట్లాడటానికి మైక్రోఫోన్‌ను క్లిక్ చేయండి...",
+    ask_question_placeholder: "మీ ప్రశ్నను ఇక్కడ టైప్ చేయండి...",
+    send: "పంపు"
+  }
+};
+
+function applyTranslations() {
+  const dict = translations[currentLanguage] || translations['en'];
+  
+  // Elements with data-translate
+  document.querySelectorAll("[data-translate]").forEach(el => {
+    const key = el.getAttribute("data-translate");
+    if (dict[key]) {
+      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        el.placeholder = dict[key];
+      } else if (key === "welcome_back") {
+        const greetingSpan = document.getElementById("dashboard-user-greeting");
+        const greetingName = greetingSpan ? greetingSpan.innerText : "Explorer";
+        el.innerHTML = `${dict[key]} <span class="text-gradient-primary" id="dashboard-user-greeting">${greetingName}</span>!`;
+      } else {
+        el.innerText = dict[key];
+      }
+    }
+  });
+
+  // Handle placeholders specifically for inputs/textareas
+  const textAnswerInput = document.getElementById("interview-text-answer");
+  if (textAnswerInput) textAnswerInput.placeholder = dict["type_response"];
+  
+  const mentorInputField = document.getElementById("mentor-input-field");
+  if (mentorInputField) mentorInputField.placeholder = dict["ask_question_placeholder"];
+
+  // Update current header title
+  const activeLink = document.querySelector(".sidebar-link.active");
+  if (activeLink) {
+    const viewName = activeLink.getAttribute("data-view");
+    const headerTitle = document.getElementById("current-view-title");
+    const viewKey = `nav_${viewName}`;
+    if (headerTitle) {
+      headerTitle.innerText = dict[viewKey] || activeLink.innerText.trim();
+    }
+  }
+}
+
+// Theme Switcher Logic
+function initTheme() {
+  const savedTheme = localStorage.getItem("upskill_theme");
+  const body = document.body;
+  const toggleBtn = document.getElementById("theme-toggle-btn");
+  
+  if (savedTheme === "light") {
+    body.classList.add("light-mode");
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  } else {
+    body.classList.remove("light-mode");
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+  }
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const toggleBtn = document.getElementById("theme-toggle-btn");
+  body.classList.toggle("light-mode");
+  
+  if (body.classList.contains("light-mode")) {
+    localStorage.setItem("upskill_theme", "light");
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    showToast(currentLanguage === 'hi' ? "लाइट मोड सक्रिय" : currentLanguage === 'te' ? "లైట్ మోడ్ సక్రియం చేయబడింది" : "Switched to Light Mode", "success");
+  } else {
+    localStorage.setItem("upskill_theme", "dark");
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    showToast(currentLanguage === 'hi' ? "डार्क मोड सक्रिय" : currentLanguage === 'te' ? "డార్క్ మోడ్ సక్రియం చేయబడింది" : "Switched to Dark Mode", "success");
+  }
+}
+
 async function callServerAPI(endpoint, payload) {
+  // Inject current language selection
+  const langName = currentLanguage === 'hi' ? 'Hindi' : currentLanguage === 'te' ? 'Telugu' : 'English';
+  payload.language = langName;
+
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -1440,6 +1659,42 @@ function logActivity(activityText) {
 // ==========================================
 
 window.addEventListener("DOMContentLoaded", () => {
+  // Initialize theme
+  initTheme();
+  
+  // Wire theme toggle button click handler
+  const themeToggle = document.getElementById("theme-toggle-btn");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", toggleTheme);
+  }
+  
+  // Initialize language selector and value
+  const langSelect = document.getElementById("language-select");
+  if (langSelect) {
+    langSelect.value = currentLanguage;
+    langSelect.addEventListener("change", (e) => {
+      currentLanguage = e.target.value;
+      localStorage.setItem("upskill_lang", currentLanguage);
+      applyTranslations();
+      showToast(currentLanguage === 'hi' ? "भाषा बदली गई" : currentLanguage === 'te' ? "భాష మార్చబడింది" : "Language Switched", "success");
+    });
+  }
+  applyTranslations();
+
+  // Wire click handlers for interactive dashboard stats cards
+  const cardAts = document.getElementById("card-ats-score");
+  if (cardAts) {
+    cardAts.addEventListener("click", () => showView("analyser"));
+  }
+  const cardRoadmap = document.getElementById("card-roadmap-progress");
+  if (cardRoadmap) {
+    cardRoadmap.addEventListener("click", () => showView("learn"));
+  }
+  const cardInterview = document.getElementById("card-interviews-done");
+  if (cardInterview) {
+    cardInterview.addEventListener("click", () => showView("interview"));
+  }
+
   const activeUser = sessionStorage.getItem("upskill_active_user");
   if (activeUser) {
     currentUser = JSON.parse(activeUser);

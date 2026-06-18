@@ -1695,6 +1695,23 @@ body::after {
   box-shadow: inset 0 0 12px rgba(16, 185, 129, 0.02);
 }
 
+/* Inline AI highlight badge */
+.ai-badge-inline {
+  background: var(--primary-grad);
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 8px var(--primary-glow);
+  margin-right: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
 /* Voice waveform style upgrades */
 .speech-indicator .speech-bar {
   background: linear-gradient(180deg, var(--secondary) 0%, var(--primary) 100%);
@@ -1825,3 +1842,173 @@ body::after {
     padding: 16px;
   }
 }
+
+/* ==========================================
+   IMAGE-BASED ICON AND HEADER UPGRADES
+   ========================================== */
+.stat-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.floating-ai-trigger img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15));
+  transition: var(--transition-smooth);
+}
+.floating-ai-trigger:hover img {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+#theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+#theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+.language-selector select {
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  outline: none;
+}
+.language-selector select:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--primary);
+}
+.language-selector select option {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+}
+
+/* ==========================================
+   THEME OVERRIDES (LIGHT MODE)
+   ========================================== */
+body.light-mode {
+  --bg-deep: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-hover: rgba(255, 255, 255, 0.9);
+  --border-glass: rgba(15, 23, 42, 0.08);
+  --border-glass-focus: rgba(59, 130, 246, 0.5);
+  
+  --primary: #2563eb;
+  --primary-glow: rgba(37, 99, 235, 0.15);
+  --primary-grad: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  
+  --secondary: #059669;
+  --secondary-glow: rgba(5, 150, 105, 0.15);
+  --secondary-grad: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  
+  --accent: #db2777;
+  --accent-grad: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+}
+
+/* Specific Light Mode Fixes */
+body.light-mode::after {
+  opacity: 0.04; /* Softer dotted grid overlay in light mode */
+}
+body.light-mode .app-sidebar {
+  background: rgba(255, 255, 255, 0.8);
+}
+body.light-mode .sidebar-link.active {
+  color: #ffffff !important; /* Keep active text readable on blue gradient */
+}
+body.light-mode .sidebar-link:hover {
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--text-primary);
+}
+body.light-mode .auth-card {
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+body.light-mode .select-input, 
+body.light-mode .text-input,
+body.light-mode .textarea-input,
+body.light-mode .mentor-chat-input,
+body.light-mode .auth-input {
+  background: rgba(255, 255, 255, 0.85);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+body.light-mode .select-input option {
+  background: #ffffff;
+  color: #0f172a;
+}
+body.light-mode .upload-dropzone {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(15, 23, 42, 0.12);
+}
+body.light-mode .welcome-hero {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-color: rgba(59, 130, 246, 0.15);
+}
+body.light-mode .toast {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
+}
+body.light-mode .api-badge {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(15, 23, 42, 0.1);
+  color: #0f172a;
+}
+body.light-mode .recent-activity-list .activity-item {
+  border-color: rgba(15, 23, 42, 0.05);
+}
+body.light-mode .language-selector select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+body.light-mode #theme-toggle-btn {
+  background: rgba(15, 23, 42, 0.04);
+}
+body.light-mode #theme-toggle-btn:hover {
+  background: rgba(15, 23, 42, 0.08);
+}
+body.light-mode .language-selector select {
+  background: rgba(15, 23, 42, 0.04);
+}
+body.light-mode .language-selector select:hover {
+  background: rgba(15, 23, 42, 0.08);
+}
+body.light-mode .floating-ai-trigger img {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+body.light-mode .roadmap-milestone.mastered {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+body.light-mode .roadmap-milestone.active {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+body.light-mode .roadmap-checkbox-item label {
+  color: #334155;
+}
+
