@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UpSkill - AI-Powered Career Development Platform. Analyze your resume, build personalized learning roadmaps, undergo AI mock interviews, and find internship opportunities.">
+  <title>UpSkill | Elevate Your Career with AI</title>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       TOAST NOTIFICATIONS
+       ========================================== -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ==========================================
+       AUTHENTICATION VIEW
+       ========================================== -->
+  <div id="auth-view" class="auth-container">
+    <div id="auth-card" class="auth-card glass">
+      
+      <!-- Logo -->
+      <div class="auth-header">
+        <div class="auth-logo text-gradient-primary">
+          <i class="fa-solid fa-graduation-cap"></i> UpSkill
+        </div>
+        <p id="auth-subtitle">Sign in to accelerate your career growth</p>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="login-form" class="auth-form" onsubmit="event.preventDefault();">
+        <div class="auth-form-group">
+          <label for="login-email">EMAIL ADDRESS</label>
+          <div class="auth-input-wrapper">
+            <input type="email" id="login-email" class="auth-input" placeholder="name@domain.com" required autocomplete="email">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+        </div>
+
+        <div class="auth-form-group" style="margin-top: 16px;">
+          <label for="login-password">PASSWORD</label>
+          <div class="auth-input-wrapper">
+            <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
+            <i class="fa-solid fa-lock"></i>
+            <i class="fa-solid fa-eye password-toggle" id="login-password-toggle"></i>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn btn-primary" style="width: 100%; margin-top: 28px;">
+          Sign In <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <!-- Register Form (Hidden by default) -->
+      <form id="register-form" class="auth-form" onsubmit="event.preventDefault();" style="display: none;">
+        <div class="auth-form-group">
+          <label for="register-name">FULL NAME</label>
+          <div class="auth-input-wrapper">
+            <input type="text" id="register-name" class="auth-input" placeholder="John Doe" required autocomplete="name">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
+
+        <div class="auth-form-group" style="margin-top: 16px;">
+          <label for="register-email">EMAIL ADDRESS</label>
+          <div class="auth-input-wrapper">
+            <input type="email" id="register-email" class="auth-input" placeholder="name@domain.com" required autocomplete="email">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+        </div>
+
+        <div class="auth-form-group" style="margin-top: 16px;">
+          <label for="register-password">PASSWORD</label>
+          <div class="auth-input-wrapper">
+            <input type="password" id="register-password" class="auth-input" placeholder="Min. 8 characters" required autocomplete="new-password">
+            <i class="fa-solid fa-lock"></i>
+            <i class="fa-solid fa-eye password-toggle" id="register-password-toggle"></i>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-register-submit" class="btn btn-secondary" style="width: 100%; margin-top: 28px;">
+          Create Account <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+
+      <!-- Auth Switch Footer -->
+      <div id="auth-footer" class="auth-footer">
+        Don't have an account? <a href="#" id="auth-switch-link">Create one</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN PLATFORM VIEW
+       ========================================== -->
+  <div id="app-view" class="app-shell" style="display: none;">
+    
+    <!-- Sidebar -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-brand text-gradient-primary">
+        <i class="fa-solid fa-graduation-cap"></i> UpSkill
+      </div>
+
+      <ul class="sidebar-menu">
+        <li>
+          <a class="sidebar-link active" data-view="dashboard" id="nav-dashboard">
+            <i class="fa-solid fa-chart-pie"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-view="analyser" id="nav-analyser">
+            <i class="fa-solid fa-file-invoice"></i> Resume Analyser
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-view="learn" id="nav-learn">
+            <i class="fa-solid fa-route"></i> Roadmap & Learn
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-view="interview" id="nav-interview">
+            <i class="fa-solid fa-comments-question-check"></i> Mock Interviews
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-view="internships" id="nav-internships">
+            <i class="fa-solid fa-briefcase"></i> Internships
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-view="govt-schemes" id="nav-govt-schemes">
+            <i class="fa-solid fa-building-columns"></i> Govt Schemes
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-view="mentor" id="nav-mentor">
+            <i class="fa-solid fa-robot"></i> AI Mentor
+          </a>
+        </li>
+      </ul>
+
+      <!-- User Profile Widget in Sidebar Footer -->
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="user-avatar-initials">JD</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="user-profile-name">John Doe</div>
+          <div class="sidebar-user-role" id="user-profile-status">Student</div>
+        </div>
+        <div class="logout-btn" id="btn-logout" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Main Workspace -->
+    <div class="app-container">
+      
+      <!-- Top Header -->
+      <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <button id="mobile-sidebar-toggle" class="mobile-toggle-btn" title="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="header-title">
+            <h1 id="current-view-title">Dashboard</h1>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- API Connection Badge -->
+          <div class="api-badge" id="btn-api-status" title="Configure AI API Settings">
+            <div id="api-status-indicator" class="api-status-dot missing"></div>
+            <span id="api-status-text">Simulated AI</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Sub View Containers -->
+      <main class="app-views">
+        
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="view-panel active">
+          <div class="dashboard-grid">
+            <div class="dashboard-main">
+              <!-- Welcome banner -->
+              <div class="welcome-hero glass">
+                <h2>Welcome Back, <span class="text-gradient-primary" id="dashboard-user-greeting">Explorer</span>!</h2>
+                <p>Track your learning, analyze resumes, practice mock interviews, and land top opportunities using AI-driven coaching.</p>
+              </div>
+
+              <!-- Quick Stats Grid -->
+              <div class="stats-grid">
+                <div class="stat-card glass glass-interactive">
+                  <div class="stat-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                  <div class="stat-value" id="stat-ats-score">--</div>
+                  <div class="stat-label">Last ATS Resume Score</div>
+                </div>
+                <div class="stat-card glass glass-interactive">
+                  <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
+                  <div class="stat-value" id="stat-roadmap-progress">0%</div>
+                  <div class="stat-label">Roadmap Progress</div>
+                </div>
+                <div class="stat-card glass glass-interactive">
+                  <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+                  <div class="stat-value" id="stat-interviews-done">0</div>
+                  <div class="stat-label">AI Interviews Done</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Sidebar (Activities & Quick links) -->
+            <div class="dashboard-aside">
+              <div class="glass" style="padding: 24px;">
+                <h3 class="dashboard-section-title"><i class="fa-solid fa-wave-pulse"></i> Recent Activity</h3>
+                <div class="recent-activity-list" id="activity-log-list">
+                  <div class="activity-item glass" style="background: rgba(255,255,255,0.01);">
+                    <div class="activity-dot"></div>
+                    <div class="activity-info">
+                      <div class="activity-title">Account Created</div>
+                      <div class="activity-time">Just now</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RESUME ANALYSER VIEW -->
+        <section id="view-analyser" class="view-panel">
+          <div class="analyser-layout">
+            <!-- Form panel -->
+            <div class="analyser-form glass">
+              <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Upload Resume</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">
+                We'll run an ATS check for your desired role, identify key missing skills, and compile a roadmap.
+              </p>
+
+              <div class="form-field">
+                <label for="analyser-target-role">AIMED JOB ROLE</label>
+                <select id="analyser-target-role" class="select-input">
+                  <option value="Frontend Developer">Frontend Developer</option>
+                  <option value="Backend Developer">Backend Developer</option>
+                  <option value="Fullstack Developer">Fullstack Developer</option>
+                  <option value="Data Scientist">Data Scientist</option>
+                  <option value="Mobile App Developer">Mobile App Developer</option>
+                  <option value="Product Manager">Product Manager</option>
+                  <option value="UI/UX Designer">UI/UX Designer</option>
+                  <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="analyser-status">CURRENT STATUS</label>
+                <select id="analyser-status" class="select-input">
+                  <option value="Student">Student</option>
+                  <option value="Working Professional">Working Professional</option>
+                </select>
+              </div>
+
+              <!-- Upload type switcher -->
+              <div class="form-field" style="margin-top: 10px;">
+                <label>RESUME CONTENT</label>
+                <div class="upload-dropzone" id="resume-dropzone">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                  <div>
+                    <span style="font-weight: 600;">Drag & Drop Resume File</span> or click to upload
+                  </div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Supports PDF, DOCX, TXT (Simulated upload)</span>
+                  <input type="file" id="resume-file-input" style="display: none;" accept=".pdf,.docx,.txt">
+                </div>
+              </div>
+
+              <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">— OR PASTE TEXT DIRECTLY —</div>
+
+              <div class="form-field">
+                <textarea id="resume-text-input" class="textarea-input" placeholder="Paste your resume contents, text bio, project history, and experience here..."></textarea>
+              </div>
+
+              <button id="btn-run-analysis" class="btn btn-primary" style="width: 100%;">
+                Start AI Analysis <i class="fa-solid fa-circle-nodes"></i>
+              </button>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="analyser-results">
+              <div id="analyser-placeholder" class="glass" style="padding: 60px; text-align: center; color: var(--text-secondary);">
+                <i class="fa-solid fa-file-invoice" style="font-size: 4rem; color: rgba(255,255,255,0.05); margin-bottom: 24px; display: block;"></i>
+                <p>Fill out the resume details and trigger the analysis to view your ATS grading, missing skills, and detailed career feedback.</p>
+              </div>
+
+              <div id="analyser-loading" class="glass loader-container" style="display: none;">
+                <div class="spinner"></div>
+                <p style="font-weight: 600; margin-top: 8px;">Analyzing resume against role profiles...</p>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);" id="analysis-load-text">Connecting to Gemini AI Engine...</span>
+              </div>
+
+              <div id="analyser-results-card" class="glass results-card" style="display: none;">
+                <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 20px;" class="text-gradient-primary">Analysis Complete</h3>
+
+                <div class="score-circle-container">
+                  <div class="score-radial" id="ats-score-radial" style="--score: 0;">
+                    <div class="score-inner">
+                      <span id="ats-score-val">0</span>
+                      <span>ATS SCORE</span>
+                    </div>
+                  </div>
+                  <p style="font-weight: 600; margin-top: 14px;" id="ats-evaluation-title">Good Match</p>
+                </div>
+
+                <div class="results-sections">
+                  <div>
+                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--secondary);">
+                      <i class="fa-solid fa-triangle-exclamation"></i> Missing Required Skills
+                    </h4>
+                    <div class="skills-list" id="analysis-missing-skills">
+                      <!-- Rendered dynamically -->
+                    </div>
+                  </div>
+
+                  <div style="margin-top: 10px;">
+                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--accent);">
+                      <i class="fa-solid fa-lightbulb"></i> Optimization Recommendations
+                    </h4>
+                    <div id="analysis-optimization-bullets">
+                      <!-- Bullet points -->
+                    </div>
+                  </div>
+
+                  <div style="margin-top: 12px;">
+                    <button class="btn btn-secondary" id="btn-goto-roadmap" style="width: 100%;">
+                      Generate Personalized Roadmap <i class="fa-solid fa-route"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ROADMAP & LEARN VIEW -->
+        <section id="view-learn" class="view-panel">
+          <!-- No skills generated message -->
+          <div id="roadmap-placeholder" class="glass" style="padding: 60px; text-align: center; color: var(--text-secondary);">
+            <i class="fa-solid fa-route" style="font-size: 4rem; color: rgba(255,255,255,0.05); margin-bottom: 24px; display: block;"></i>
+            <p>Your custom roadmap is empty. Analyze a resume in the <strong>Resume Analyser</strong> to extract your missing skills and generate a dedicated roadmap.</p>
+            <button class="btn btn-primary" id="btn-roadmap-goto-analyser" style="margin-top: 20px;">
+              Go to Resume Analyser <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div id="roadmap-loading" class="glass loader-container" style="display: none;">
+            <div class="spinner"></div>
+            <p style="font-weight: 600; margin-top: 8px;">Compiling career progression tree...</p>
+          </div>
+
+          <!-- Active Roadmap View -->
+          <div id="roadmap-active-view" style="display: none;">
+            <div class="dashboard-section-title">
+              <i class="fa-solid fa-circle-nodes"></i> UpSkill Roadmap: <span id="roadmap-role-title">Frontend Developer</span>
+            </div>
+
+            <!-- Double Column layout: Left is Visual Tree, Right is YouTube recommendations -->
+            <div style="display: grid; grid-template-columns: 1.6fr 1.4fr; gap: 32px; align-items: start;">
+              
+              <!-- Left: Visual Tree -->
+              <div class="glass" style="padding: 32px;">
+                <h4 style="margin-bottom: 24px; font-weight: 700; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px;">
+                  Learning Path Timeline
+                </h4>
+                <div class="roadmap-tree" id="roadmap-tree-nodes">
+                  <!-- Nodes generated dynamically -->
+                </div>
+              </div>
+
+              <!-- Right: YouTube Video Cards -->
+              <div>
+                <div class="glass" style="padding: 32px; margin-bottom: 24px;">
+                  <h4 style="margin-bottom: 8px; font-weight: 700;">
+                    <i class="fa-brands fa-youtube" style="color: var(--danger);"></i> Curated Learning Hub
+                  </h4>
+                  <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">
+                    Click on roadmap nodes or select skills below to load high-quality YouTube lectures.
+                  </p>
+
+                  <div class="learn-yt-list" id="learn-youtube-grid">
+                    <!-- YouTube links dynamically loaded -->
+                  </div>
+                </div>
+
+                <!-- Missing Skill Quick Hub -->
+                <div class="glass" style="padding: 32px;">
+                  <h4 style="margin-bottom: 16px; font-weight: 700;">
+                    Target Skills Directory
+                  </h4>
+                  <div class="skills-list" id="roadmap-skills-directory">
+                    <!-- Directory of skills -->
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- AI MOCK INTERVIEWS VIEW -->
+        <section id="view-interview" class="view-panel">
+          <!-- Setup Room -->
+          <div id="interview-setup-room" class="glass interview-setup">
+            <h2 class="text-gradient-primary"><i class="fa-solid fa-user-tie"></i> AI Mock Interview Lobby</h2>
+            <p style="color: var(--text-secondary); text-align: center; font-size: 0.9rem; margin-bottom: 24px;">
+              Practice general and technical interview questions tailored for your desired job role. Receive live feedback and a communication/technical assessment.
+            </p>
+
+            <div class="interview-setup-form">
+              <div class="form-field">
+                <label for="interview-target-role">INTERVIEW JOB TARGET</label>
+                <select id="interview-target-role" class="select-input">
+                  <option value="Frontend Developer">Frontend Developer</option>
+                  <option value="Backend Developer">Backend Developer</option>
+                  <option value="Fullstack Developer">Fullstack Developer</option>
+                  <option value="Data Scientist">Data Scientist</option>
+                  <option value="Product Manager">Product Manager</option>
+                  <option value="UI/UX Designer">UI/UX Designer</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="interview-type">QUESTION COMPOSITION</label>
+                <select id="interview-type" class="select-input">
+                  <option value="mixed">Mixed (Technical + General Career)</option>
+                  <option value="technical">Purely Technical</option>
+                  <option value="general">Purely General / HR Behavioral</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="interview-difficulty">DIFFICULTY LEVEL</label>
+                <select id="interview-difficulty" class="select-input">
+                  <option value="Junior / Entry Level">Junior / Entry Level</option>
+                  <option value="Mid-Level">Mid-Level</option>
+                  <option value="Senior Staff">Senior Staff</option>
+                </select>
+              </div>
+
+              <button id="btn-start-interview" class="btn btn-primary" style="margin-top: 16px;">
+                Begin AI Simulation <i class="fa-solid fa-microphone"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Room -->
+          <div id="interview-live-room" class="interview-room" style="display: none;">
+            
+            <!-- Chat panel -->
+            <div class="glass interview-chat">
+              <div class="interview-history" id="interview-chat-history">
+                <!-- Chat dialogues -->
+              </div>
+
+              <div class="interview-input-container">
+                <!-- Speech button -->
+                <button class="voice-btn" id="btn-interview-voice" title="Use Voice Recognition (Speak Answer)">
+                  <i class="fa-solid fa-microphone"></i>
+                </button>
+
+                <!-- Wave animation -->
+                <div class="speech-indicator">
+                  <div class="speech-bar"></div>
+                  <div class="speech-bar"></div>
+                  <div class="speech-bar"></div>
+                  <div class="speech-bar"></div>
+                </div>
+
+                <input type="text" id="interview-text-answer" class="mentor-chat-input" placeholder="Type your response or click the microphone to speak...">
+                <button id="btn-interview-submit-answer" class="btn btn-primary">
+                  Submit <i class="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Webcam panel & Session stats -->
+            <div class="interview-aside">
+              <div class="glass webcam-sim">
+                <i class="fa-solid fa-user-astronaut webcam-avatar"></i>
+                <div class="webcam-tag">AI INTERVIEWER</div>
+              </div>
+
+              <div class="glass interview-stats">
+                <h4 style="font-weight: 700; margin-bottom: 8px;">Session Status</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  Role: <span id="session-info-role" style="font-weight: 600; color: var(--text-primary);">Frontend</span>
+                </p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                  Difficulty: <span id="session-info-diff" style="font-weight: 600; color: var(--text-primary);">Junior</span>
+                </p>
+
+                <div style="margin-top: 16px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600;">
+                    <span>Question Progress</span>
+                    <span id="interview-q-counter">1 / 5</span>
+                  </div>
+                  <div class="interview-progress-bar">
+                    <div id="interview-q-progress-fill" class="interview-progress-fill"></div>
+                  </div>
+                </div>
+
+                <button class="btn btn-outline" id="btn-terminate-interview" style="width: 100%; margin-top: 24px; border-color: rgba(239, 68, 68, 0.3); color: #f87171;">
+                  Terminate Session <i class="fa-solid fa-rectangle-xmark"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evaluation Feedback View -->
+          <div id="interview-feedback-view" class="glass" style="max-width: 800px; margin: 0 auto; padding: 40px; display: none;">
+            <div style="text-align: center; margin-bottom: 32px;">
+              <i class="fa-solid fa-award text-gradient-primary" style="font-size: 4rem; display: block; margin-bottom: 16px;"></i>
+              <h2 class="text-gradient-primary">Evaluation Complete</h2>
+              <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 4px;">
+                Below is a detailed breakdown of your performance, communication style, and technical accuracy.
+              </p>
+            </div>
+
+            <div class="dashboard-grid" style="grid-template-columns: 1.2fr 1.8fr; margin-bottom: 32px;">
+              <div class="glass" style="padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="score-radial" id="interview-score-radial" style="--score: 75; width: 130px; height: 130px;">
+                  <div class="score-inner" style="font-size: 2rem;">
+                    <span id="interview-feedback-score">75%</span>
+                    <span style="font-size: 0.7rem;">SCORE</span>
+                  </div>
+                </div>
+                <h4 style="margin-top: 16px;" id="interview-grade-title">B+ Above Average</h4>
+              </div>
+
+              <div class="glass" style="padding: 24px;">
+                <h4 style="margin-bottom: 12px; font-weight: 700; color: var(--secondary);">Interviewer Remarks</h4>
+                <p id="interview-feedback-summary" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                  Calculating insights...
+                </p>
+              </div>
+            </div>
+
+            <div class="glass" style="padding: 32px; margin-bottom: 32px;">
+              <h4 style="margin-bottom: 20px; font-weight: 700;"><i class="fa-solid fa-list-check"></i> Answer Breakdown</h4>
+              <div id="interview-q-breakdown" style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- Filled dynamically -->
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 16px;">
+              <button class="btn btn-primary" id="btn-interview-restart">Restart New Interview</button>
+              <button class="btn btn-outline" id="btn-interview-view-roadmap">View Roadmap</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- INTERNSHIPS VIEW -->
+        <section id="view-internships" class="view-panel">
+          <!-- Job Portals Hero Header -->
+          <div class="glass job-portals-hero">
+            <h3 style="font-weight: 700;"><i class="fa-solid fa-briefcase"></i> External Job Portals</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+              Ready to apply? Jump directly to pre-configured search queries on major job boards:
+            </p>
+            <div class="portal-links-container">
+              <a href="https://linkedin.com/jobs" target="_blank" rel="noopener noreferrer" class="portal-badge-link" id="portal-linkedin">
+                <i class="fa-brands fa-linkedin"></i> LinkedIn Jobs <i class="fa-solid fa-up-right-from-square" style="font-size: 0.75rem;"></i>
+              </a>
+              <a href="https://internshala.com" target="_blank" rel="noopener noreferrer" class="portal-badge-link" id="portal-internshala">
+                <i class="fa-solid fa-graduation-cap"></i> Internshala <i class="fa-solid fa-up-right-from-square" style="font-size: 0.75rem;"></i>
+              </a>
+              <a href="https://indeed.com" target="_blank" rel="noopener noreferrer" class="portal-badge-link" id="portal-indeed">
+                <i class="fa-solid fa-magnifying-glass"></i> Indeed <i class="fa-solid fa-up-right-from-square" style="font-size: 0.75rem;"></i>
+              </a>
+              <a href="https://wellfound.com" target="_blank" rel="noopener noreferrer" class="portal-badge-link" id="portal-wellfound">
+                <i class="fa-solid fa-peace"></i> Wellfound (AngelList) <i class="fa-solid fa-up-right-from-square" style="font-size: 0.75rem;"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="dashboard-section-title">
+            <i class="fa-solid fa-fire"></i> Live Internship Openings (Simulated Feed)
+          </div>
+
+          <!-- Filters -->
+          <div class="search-filter-bar">
+            <div class="search-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="internship-search" class="search-input" placeholder="Search internships by company, title, or skills...">
+            </div>
+            
+            <select id="internship-filter-type" class="select-input" style="width: auto; min-width: 150px;">
+              <option value="all">All Types</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="On-Site">On-Site</option>
+            </select>
+
+            <select id="internship-filter-domain" class="select-input" style="width: auto; min-width: 180px;">
+              <option value="all">All Domains</option>
+              <option value="Development">Software Development</option>
+              <option value="Design">UI/UX & Creative</option>
+              <option value="Data">Data Science & AI</option>
+              <option value="Product">Product Management</option>
+            </select>
+          </div>
+
+          <!-- Listings Grid -->
+          <div class="internships-grid" id="internships-grid-container">
+            <!-- Listings generated dynamically -->
+          </div>
+        </section>
+
+        <!-- GOVERNMENT SCHEMES VIEW -->
+        <section id="view-govt-schemes" class="view-panel">
+          <div class="dashboard-section-title">
+            <i class="fa-solid fa-building-columns"></i> Government Skills Development Schemes
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; max-width: 800px;">
+            Explore state-sponsored learning programs, internships, and subsidy schemes tailored to help students and employees upscale their careers.
+          </p>
+
+          <!-- Audience Filter Tab -->
+          <div class="schemes-tabs">
+            <button class="schemes-tab-btn active" data-target="all" id="btn-scheme-all">All Schemes</button>
+            <button class="schemes-tab-btn" data-target="student" id="btn-scheme-student">For Students</button>
+            <button class="schemes-tab-btn" data-target="working" id="btn-scheme-working">For Working Professionals</button>
+          </div>
+
+          <!-- Cards Grid -->
+          <div class="schemes-grid" id="schemes-grid-container">
+            <!-- Schemes cards dynamically populated -->
+          </div>
+        </section>
+
+        <!-- AI MENTOR VIEW -->
+        <section id="view-mentor" class="view-panel">
+          <div class="mentor-container glass">
+            <div class="mentor-chat-wrapper">
+              
+              <!-- Chat history -->
+              <div class="mentor-chat-history" id="mentor-chat-history">
+                <div class="mentor-chat-bubble ai">
+                  <p>Hello! I am your <strong>UpSkill AI Mentor</strong>. 🚀</p>
+                  <p>You can ask me questions about resume layout design, specific coding concepts, career strategies, or how to master specific tech skills. How can I help you today?</p>
+                </div>
+              </div>
+
+              <!-- Chat Input -->
+              <div class="mentor-chat-input-wrapper">
+                <input type="text" id="mentor-chat-input-field" class="mentor-chat-input" placeholder="Ask about roadmaps, technical concepts, certifications...">
+                <button id="btn-mentor-chat-send" class="btn btn-primary">
+                  Ask AI <i class="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       API SETTINGS MODAL
+       ========================================== -->
+  <div id="api-modal" class="modal-overlay">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-server"></i> Server AI Configuration</h3>
+        <i class="fa-solid fa-xmark modal-close" id="btn-close-api-modal"></i>
+      </div>
+
+      <p class="modal-desc">
+        UpSkill is configured with a secure backend API server. Your API credentials are saved in environment variables on the host machine and are never exposed to the client browser.
+      </p>
+
+      <div class="glass" style="padding: 16px; display: flex; flex-direction: column; gap: 12px; background: rgba(0, 0, 0, 0.2);">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+          <span style="color: var(--text-secondary);">Server Status:</span>
+          <span style="font-weight: 600;" id="server-diag-status">Checking...</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+          <span style="color: var(--text-secondary);">Groq Key (Env):</span>
+          <span style="font-weight: 600;" id="server-diag-key">Checking...</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+          <span style="color: var(--text-secondary);">Active Model:</span>
+          <span style="font-weight: 600; color: var(--secondary);">llama-3.3-70b-versatile</span>
+        </div>
+      </div>
+
+      <div class="form-field" style="margin-top: 12px;">
+        <label for="settings-ai-mode">AI OPERATION MODE</label>
+        <select id="settings-ai-mode" class="select-input">
+          <option value="mock">Simulated AI Engine (Offline & Fast)</option>
+          <option value="live">Secure Backend AI Engine (Accurate)</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end;">
+        <button class="btn btn-outline" id="btn-api-modal-cancel">Close</button>
+        <button class="btn btn-primary" id="btn-api-modal-save">Apply Mode</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       FLOATING QUICK-CHAT TOGGLE
+       ========================================== -->
+  <div class="floating-ai-trigger" id="floating-ai-mentor-btn" title="Quick AI Mentor Help">
+    <i class="fa-solid fa-robot"></i>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

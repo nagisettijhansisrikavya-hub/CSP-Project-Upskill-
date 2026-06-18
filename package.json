@@ -1,0 +1,12 @@
+{
+  "name": "upskill-platform",
+  "version": "1.0.0",
+  "description": "AI-Powered Career Development and Upskilling Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
