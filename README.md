@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 UpSkill | AI-Powered Career Development Platform
 
 UpSkill is a premium, full-stack career development and upskilling platform. It features a modern glassmorphic dark-theme dashboard designed to help users scan resumes, generate interactive learning roadmaps, practice voice-supported AI mock interviews, search for internships, and chat with a persistent AI Mentor.
@@ -93,3 +94,7 @@ Open your browser and navigate to:
 
 ## 📄 License
 This project is open-source and available under the [MIT License](LICENSE).
+=======
+# CSP-Project-Upskill-
+UPSKILL is an AI-powered career guidance platform that analyzes a user's target job and current skills, identifies skill gaps, creates personalized learning roadmaps, recommends learning resources, conducts AI mock interviews, and connects users with relevant internships and job opportunities to improve career readiness. 🚀
+>>>>>>> e10b18def0b317235d4a490e70d834e965d48523
