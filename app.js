@@ -1594,124 +1594,152 @@ floatBtn.addEventListener("click", () => {
 // AUTHENTICATION & SESSION MANAGEMENT
 // ==========================================
 
-const switchLink = document.getElementById("auth-switch-link");
 const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
 const authSubtitle = document.getElementById("auth-subtitle");
+const authFooter = document.getElementById("auth-footer");
 
 let isLoginMode = true;
 
-switchLink.addEventListener("click", (e) => {
-  e.preventDefault();
-  isLoginMode = !isLoginMode;
+function setAuthMode(toLogin) {
+  isLoginMode = toLogin;
+  const dict = translations[currentLanguage] || translations['en'];
   
   if (isLoginMode) {
-    loginForm.style.display = "block";
-    registerForm.style.display = "none";
-    authSubtitle.innerText = "Sign in to accelerate your career growth";
-    switchLink.innerText = "Create one";
-    document.getElementById("auth-footer").innerHTML = `Don't have an account? <a href="#" id="auth-switch-link">Create one</a>`;
+    if (loginForm) loginForm.style.display = "block";
+    if (registerForm) registerForm.style.display = "none";
+    if (authSubtitle) {
+      authSubtitle.setAttribute("data-translate", "brand_slogan");
+      authSubtitle.innerText = dict["brand_slogan"] || "From learning today to leading tomorrow.";
+    }
+    if (authFooter) {
+      authFooter.innerHTML = `Don't have an account? <a href="#" id="auth-switch-link">Create one</a>`;
+    }
   } else {
-    loginForm.style.display = "none";
-    registerForm.style.display = "block";
-    authSubtitle.innerText = "Register your profile to access custom AI roadmaps";
-    switchLink.innerText = "Sign In";
-    document.getElementById("auth-footer").innerHTML = `Already have an account? <a href="#" id="auth-switch-link">Sign In</a>`;
+    if (loginForm) loginForm.style.display = "none";
+    if (registerForm) registerForm.style.display = "block";
+    if (authSubtitle) {
+      authSubtitle.removeAttribute("data-translate");
+      authSubtitle.innerText = "Register your profile to access custom AI roadmaps";
+    }
+    if (authFooter) {
+      authFooter.innerHTML = `Already have an account? <a href="#" id="auth-switch-link">Sign In</a>`;
+    }
   }
-  
-  // Rebind link listener since innerHTML destroys it
-  document.getElementById("auth-switch-link").addEventListener("click", (ev) => {
-    ev.preventDefault();
-    switchLink.click();
+}
+
+// Auth footer toggle listener using event delegation
+if (authFooter) {
+  authFooter.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "auth-switch-link") {
+      e.preventDefault();
+      setAuthMode(!isLoginMode);
+    }
   });
-});
+}
 
 // Password visibility toggles
-document.getElementById("login-password-toggle").addEventListener("click", (e) => {
-  const input = document.getElementById("login-password");
-  const isPass = input.type === "password";
-  input.type = isPass ? "text" : "password";
-  e.target.className = isPass ? "fa-solid fa-eye-slash password-toggle" : "fa-solid fa-eye password-toggle";
-});
+const loginPasswordToggle = document.getElementById("login-password-toggle");
+if (loginPasswordToggle) {
+  loginPasswordToggle.addEventListener("click", (e) => {
+    const input = document.getElementById("login-password");
+    if (input) {
+      const isPass = input.type === "password";
+      input.type = isPass ? "text" : "password";
+      e.target.className = isPass ? "fa-solid fa-eye-slash password-toggle" : "fa-solid fa-eye password-toggle";
+    }
+  });
+}
 
-document.getElementById("register-password-toggle").addEventListener("click", (e) => {
-  const input = document.getElementById("register-password");
-  const isPass = input.type === "password";
-  input.type = isPass ? "text" : "password";
-  e.target.className = isPass ? "fa-solid fa-eye-slash password-toggle" : "fa-solid fa-eye password-toggle";
-});
+const registerPasswordToggle = document.getElementById("register-password-toggle");
+if (registerPasswordToggle) {
+  registerPasswordToggle.addEventListener("click", (e) => {
+    const input = document.getElementById("register-password");
+    if (input) {
+      const isPass = input.type === "password";
+      input.type = isPass ? "text" : "password";
+      e.target.className = isPass ? "fa-solid fa-eye-slash password-toggle" : "fa-solid fa-eye password-toggle";
+    }
+  });
+}
 
 // Register submit
-document.getElementById("btn-register-submit").addEventListener("click", () => {
-  const name = document.getElementById("register-name").value.trim();
-  const email = document.getElementById("register-email").value.trim();
-  const password = document.getElementById("register-password").value.trim();
+if (registerForm) {
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("register-name").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value.trim();
 
-  if (!name || !email || !password) {
-    showToast("Please fill all signup fields.", "warning");
-    return;
-  }
-  if (password.length < 8) {
-    showToast("Password must be at least 8 characters.", "warning");
-    return;
-  }
+    if (!name || !email || !password) {
+      showToast("Please fill all signup fields.", "warning");
+      return;
+    }
+    if (password.length < 8) {
+      showToast("Password must be at least 8 characters.", "warning");
+      return;
+    }
 
-  const users = JSON.parse(localStorage.getItem("upskill_users") || "[]");
-  if (users.find(u => u.email === email)) {
-    showToast("An account with this email already exists.", "error");
-    return;
-  }
+    const users = JSON.parse(localStorage.getItem("upskill_users") || "[]");
+    if (users.find(u => u.email === email)) {
+      showToast("An account with this email already exists.", "error");
+      return;
+    }
 
-  const newUser = {
-    id: "usr-" + Date.now(),
-    name: name,
-    email: email,
-    password: password,
-    status: "Student",
-    activeRole: "Frontend Developer",
-    lastAtsScore: null,
-    roadmapProgress: 0,
-    interviewsDone: 0,
-    completedRoadmapNodes: [],
-    missingSkills: []
-  };
+    const newUser = {
+      id: "usr-" + Date.now(),
+      name: name,
+      email: email,
+      password: password,
+      status: "Student",
+      activeRole: "Frontend Developer",
+      lastAtsScore: null,
+      roadmapProgress: 0,
+      interviewsDone: 0,
+      completedRoadmapNodes: [],
+      missingSkills: []
+    };
 
-  users.push(newUser);
-  localStorage.setItem("upskill_users", JSON.stringify(users));
+    users.push(newUser);
+    localStorage.setItem("upskill_users", JSON.stringify(users));
 
-  showToast("Registration successful! Please log in.", "success");
-  
-  // Clear fields and switch to login
-  document.getElementById("register-name").value = "";
-  document.getElementById("register-email").value = "";
-  document.getElementById("register-password").value = "";
-  switchLink.click();
-});
+    showToast("Registration successful! Please log in.", "success");
+    
+    // Clear fields and switch to login
+    document.getElementById("register-name").value = "";
+    document.getElementById("register-email").value = "";
+    document.getElementById("register-password").value = "";
+    setAuthMode(true);
+  });
+}
 
 // Login submit
-document.getElementById("btn-login-submit").addEventListener("click", () => {
-  const email = document.getElementById("login-email").value.trim();
-  const password = document.getElementById("login-password").value.trim();
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
 
-  if (!email || !password) {
-    showToast("Please fill all login fields.", "warning");
-    return;
-  }
+    if (!email || !password) {
+      showToast("Please fill all login fields.", "warning");
+      return;
+    }
 
-  const users = JSON.parse(localStorage.getItem("upskill_users") || "[]");
-  const found = users.find(u => u.email === email && u.password === password);
+    const users = JSON.parse(localStorage.getItem("upskill_users") || "[]");
+    const found = users.find(u => u.email === email && u.password === password);
 
-  if (!found) {
-    showToast("Invalid email or password.", "error");
-    return;
-  }
+    if (!found) {
+      showToast("Invalid email or password.", "error");
+      return;
+    }
 
-  currentUser = found;
-  sessionStorage.setItem("upskill_active_user", JSON.stringify(currentUser));
-  
-  showToast(`Welcome back, ${currentUser.name}!`, "success");
-  enterAppWorkspace();
-});
+    currentUser = found;
+    sessionStorage.setItem("upskill_active_user", JSON.stringify(currentUser));
+    
+    showToast(`Welcome back, ${currentUser.name}!`, "success");
+    enterAppWorkspace();
+  });
+}
 
 // Logout trigger
 document.getElementById("btn-logout").addEventListener("click", () => {
@@ -1785,6 +1813,27 @@ function logActivity(activityText) {
 // ==========================================
 
 window.addEventListener("DOMContentLoaded", () => {
+  // Initialize mock users if database is empty
+  const usersStr = localStorage.getItem("upskill_users");
+  if (!usersStr || JSON.parse(usersStr).length === 0) {
+    const defaultUsers = [
+      {
+        id: "usr-default",
+        name: "n jhansi sri kavya",
+        email: "jhansi@upskill.com",
+        password: "password123",
+        status: "Student",
+        activeRole: "Frontend Developer",
+        lastAtsScore: 85,
+        roadmapProgress: 35,
+        interviewsDone: 2,
+        completedRoadmapNodes: ["node-1", "node-2"],
+        missingSkills: ["Docker", "Kubernetes"]
+      }
+    ];
+    localStorage.setItem("upskill_users", JSON.stringify(defaultUsers));
+  }
+
   // Initialize theme
   initTheme();
   
