@@ -2159,5 +2159,254 @@ body.light-mode .tech-tag {
   100% { transform: translateY(-4px) scale(1.22); }
 }
 
+/* ==========================================
+   AUDIENCE ("WHO IT'S FOR") & USER JOURNEY
+   ========================================== */
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.audience-card {
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.audience-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.audience-emoji {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.audience-card:hover .audience-emoji {
+  animation: emoji-pop 0.6s ease infinite alternate;
+}
+
+.audience-age-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: -4px;
+}
+
+/* Specific glows and colors for each card type */
+.audience-card.student {
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+.audience-card.student:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.08);
+}
+.audience-card.student .audience-age-badge {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.audience-card.graduate {
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+.audience-card.graduate:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.08);
+}
+.audience-card.graduate .audience-age-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.audience-card.switcher {
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+.audience-card.switcher:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08);
+}
+.audience-card.switcher .audience-age-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.audience-card.seeker {
+  border: 1px solid rgba(236, 72, 153, 0.15);
+}
+.audience-card.seeker:hover {
+  border-color: rgba(236, 72, 153, 0.4);
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.08);
+}
+.audience-card.seeker .audience-age-badge {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+}
+
+.audience-card.rural {
+  border: 1px solid rgba(6, 182, 212, 0.15);
+}
+.audience-card.rural:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.08);
+}
+.audience-card.rural .audience-age-badge {
+  background: rgba(6, 182, 212, 0.15);
+  color: #22d3ee;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+/* User Journey Timeline styles */
+.journey-timeline {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 32px;
+  gap: 20px;
+}
+
+.journey-timeline::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.1), var(--primary), rgba(16, 185, 129, 0.6), rgba(99, 102, 241, 0.1));
+  z-index: 1;
+}
+
+.journey-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  transition: var(--transition-smooth);
+}
+
+.journey-step-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.journey-step:hover .journey-step-badge {
+  transform: scale(1.15);
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.journey-step-title {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.journey-step-desc {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  padding: 0 8px;
+}
+
+/* Light mode overrides */
+body.light-mode .audience-card {
+  background: rgba(255, 255, 255, 0.6);
+}
+body.light-mode .audience-card:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode .journey-step-badge {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.08);
+}
+body.light-mode .journey-step:hover .journey-step-badge {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 900px) {
+  .journey-timeline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+    padding-left: 20px;
+  }
+  
+  .journey-timeline::before {
+    top: 30px;
+    bottom: 30px;
+    left: 48px;
+    width: 2px;
+    height: auto;
+    right: auto;
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.1), var(--primary), rgba(16, 185, 129, 0.6), rgba(99, 102, 241, 0.1));
+  }
+  
+  .journey-step {
+    flex-direction: row;
+    text-align: left;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .journey-step-badge {
+    flex-shrink: 0;
+  }
+  
+  .journey-step-title {
+    margin-top: 6px;
+  }
+  
+  .journey-step-desc {
+    margin-top: 4px;
+    padding: 0;
+  }
+}
+
+/* Emoji Animation */
+@keyframes emoji-pop {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.15) translateY(-4px); }
+}
+
+
 
 
