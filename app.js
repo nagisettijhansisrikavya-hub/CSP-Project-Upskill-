@@ -1287,47 +1287,106 @@ document.getElementById("btn-interview-view-roadmap").addEventListener("click", 
 
 const voiceBtn = document.getElementById("btn-interview-voice");
 let recognition = null;
+let isListening = false;
 
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+function startSpeechRecognition() {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRec();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
-
-  recognition.onstart = () => {
-    voiceBtn.classList.add("active");
-    showToast("Listening... Speak clearly.", "info");
-  };
-
-  recognition.onend = () => {
-    voiceBtn.classList.remove("active");
-  };
-
-  recognition.onerror = (e) => {
-    showToast("Voice error: " + e.error, "error");
-    voiceBtn.classList.remove("active");
-  };
-
-  recognition.onresult = (e) => {
-    const transcript = e.results[0][0].transcript;
-    textAnswerInput.value = transcript;
-    showToast("Answer transcribed!", "success");
-  };
-}
-
-voiceBtn.addEventListener("click", () => {
-  if (!recognition) {
+  if (!SpeechRec) {
     showToast("Speech recognition is not supported on this browser.", "error");
     return;
   }
+
+  // Create fresh instance to avoid Android state hanging bugs
+  recognition = new SpeechRec();
+  recognition.continuous = false;
+  recognition.interimResults = false;
   
-  if (voiceBtn.classList.contains("active")) {
-    recognition.stop();
+  // Set language dynamically to match user preference
+  if (currentLanguage === 'hi') {
+    recognition.lang = 'hi-IN';
+  } else if (currentLanguage === 'te') {
+    recognition.lang = 'te-IN';
   } else {
-    recognition.start();
+    recognition.lang = 'en-US';
   }
-});
+
+  recognition.onstart = () => {
+    isListening = true;
+    if (voiceBtn) voiceBtn.classList.add("active");
+    showToast(
+      currentLanguage === 'hi' ? "सुन रहा हूँ... स्पष्ट बोलें।" :
+      currentLanguage === 'te' ? "వింటున్నాను... స్పష్టంగా మాట్లాడండి." :
+      "Listening... Speak clearly.", "info"
+    );
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    if (voiceBtn) voiceBtn.classList.remove("active");
+  };
+
+  recognition.onerror = (e) => {
+    isListening = false;
+    if (voiceBtn) voiceBtn.classList.remove("active");
+    console.error("Speech Recognition Error:", e.error);
+    if (e.error === 'not-allowed') {
+      showToast(
+        currentLanguage === 'hi' ? "माइक्रोफोन अनुमति अस्वीकार कर दी गई।" :
+        currentLanguage === 'te' ? "మైక్రోఫోన్ అనుమతి నిరసించబడింది." :
+        "Microphone permission blocked. Please check your browser settings or ensure you are using HTTPS.", "error"
+      );
+    } else if (e.error === 'no-speech') {
+      showToast(
+        currentLanguage === 'hi' ? "कोई आवाज़ नहीं सुनी गई।" :
+        currentLanguage === 'te' ? "ఏ శబ్దము వినపడలేదు." :
+        "No speech detected. Try speaking louder or closer to the mic.", "warning"
+      );
+    } else {
+      showToast("Voice error: " + e.error, "error");
+    }
+  };
+
+  recognition.onresult = (e) => {
+    if (e.results && e.results[0] && e.results[0][0]) {
+      const transcript = e.results[0][0].transcript;
+      if (textAnswerInput) {
+        if (textAnswerInput.value.trim() !== "") {
+          textAnswerInput.value = textAnswerInput.value.trim() + " " + transcript;
+        } else {
+          textAnswerInput.value = transcript;
+        }
+      }
+      showToast(
+        currentLanguage === 'hi' ? "उत्तर प्रतिलेखित!" :
+        currentLanguage === 'te' ? "సమాధానం రాయబడింది!" :
+        "Answer transcribed!", "success"
+      );
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (err) {
+    console.error("Failed to start recognition:", err);
+    showToast("Could not start microphone.", "error");
+  }
+}
+
+if (voiceBtn) {
+  voiceBtn.addEventListener("click", () => {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) {
+      showToast("Speech recognition is not supported on this browser.", "error");
+      return;
+    }
+
+    if (isListening && recognition) {
+      recognition.stop();
+    } else {
+      startSpeechRecognition();
+    }
+  });
+}
 
 // ==========================================
 // INTERNSHIPS LISTINGS & FILTER ENGINE
