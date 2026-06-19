@@ -194,6 +194,38 @@ app.post('/api/mentor-chat', async (req, res) => {
   }
 });
 
+// 5. Recommend Projects Route
+app.post('/api/recommend-projects', async (req, res) => {
+  const { role, languages, language } = req.body;
+  if (!role || !languages) {
+    return res.status(400).json({ error: "Missing required role or languages parameters." });
+  }
+
+  const systemInstruction = `You are a career development expert and senior software engineer. Recommend exactly 3 relevant projects that are suitable for a student aiming for the job role: ${role}, who knows the languages/technologies: ${languages}. Output strictly in JSON format. Generate all title, description, and difficulty values in the language: ${language || 'English'}.`;
+  
+  const prompt = `Based on the job role: ${role} and technical stack: ${languages}, generate a list of exactly 3 relevant project ideas.
+  Output exactly in this JSON format structure (keep JSON key names in English, but write string values in the language: ${language || 'English'}):
+  {
+    "projects": [
+      {
+        "title": "Project Title",
+        "description": "Brief description of what to build and its benefits.",
+        "difficulty": "Beginner / Intermediate / Advanced",
+        "techStack": ["React", "CSS"],
+        "searchQuery": "build project title tutorial"
+      }
+    ]
+  }`;
+
+  try {
+    const resultText = await callGroqBackend(systemInstruction, prompt, true);
+    res.json(JSON.parse(resultText));
+  } catch (err) {
+    console.error("Error in /api/recommend-projects:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Fallback: Redirect all other requests to index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

@@ -258,7 +258,7 @@ function showToast(message, type = 'info') {
 // ROUTER & VIEW CONTROLLER
 // ==========================================
 
-const views = ["dashboard", "analyser", "learn", "interview", "internships", "govt-schemes", "mentor"];
+const views = ["dashboard", "analyser", "learn", "projects", "interview", "internships", "govt-schemes", "mentor"];
 
 function showView(viewName) {
   if (!currentUser) {
@@ -282,12 +282,16 @@ function showView(viewName) {
     dashboard: "Dashboard",
     analyser: "Resume Analyser",
     learn: "Roadmap & Learning",
+    projects: "Project Hub",
     interview: "AI Mock Interviews",
     internships: "Internships Hub",
     "govt-schemes": "Government Schemes",
     mentor: "AI Mentor Chat"
   };
-  document.getElementById("current-view-title").innerText = titles[viewName];
+
+  const dict = translations[currentLanguage] || translations['en'];
+  const viewKey = `nav_${viewName}`;
+  document.getElementById("current-view-title").innerText = dict[viewKey] || titles[viewName];
 
   // Specific panel triggers
   if (viewName === 'learn') {
@@ -379,7 +383,28 @@ const translations = {
     begin_simulation: "Begin AI Simulation",
     type_response: "Type your response or click the microphone to speak...",
     ask_question_placeholder: "Type your question here...",
-    send: "Send"
+    send: "Send",
+    brand_slogan: "From learning today to leading tomorrow.",
+    nav_projects: "Project Hub",
+    projects_title: "AI Project Planner",
+    projects_subtitle: "Get personalized project ideas tailored to your target job role and the languages you already know.",
+    target_role: "TARGET JOB ROLE",
+    languages_known: "LANGUAGES & TECHNOLOGIES KNOWN",
+    projects_input_placeholder: "e.g. JavaScript, Python, React, HTML/CSS",
+    generate_ideas: "Generate Project Ideas",
+    recommended_projects: "Recommended Projects",
+    designing_projects_loading: "Designing tailored projects and finding tutorials...",
+    watch_tutorials: "Watch Tutorials",
+    benefits_title: "Benefits of UpSkill",
+    benefit_1: "Personalized career guidance",
+    benefit_2: "Skill gap identification",
+    benefit_3: "Faster learning with curated resources",
+    benefit_4: "Improved interview performance",
+    benefit_5: "Better resume quality and ATS score",
+    benefit_6: "Access to internships and jobs",
+    benefit_7: "Awareness of government opportunities",
+    benefit_8: "Stronger project portfolio",
+    benefit_9: "One platform for complete career growth"
   },
   hi: {
     dashboard_title: "डैशबोर्ड",
@@ -426,7 +451,28 @@ const translations = {
     begin_simulation: "एआई सिमुलेशन शुरू करें",
     type_response: "अपना उत्तर टाइप करें या बोलने के लिए माइक्रोफ़ोन पर क्लिक करें...",
     ask_question_placeholder: "अपना प्रश्न यहाँ टाइप करें...",
-    send: "भेजें"
+    send: "भेजें",
+    brand_slogan: "आज सीखने से लेकर कल नेतृत्व करने तक।",
+    nav_projects: "प्रोजेक्ट हब",
+    projects_title: "एआई प्रोजेक्ट प्लानर",
+    projects_subtitle: "अपनी लक्षित नौकरी की भूमिका और आपके द्वारा पहले से जानी जाने वाली भाषाओं के अनुरूप व्यक्तिगत प्रोजेक्ट विचार प्राप्त करें।",
+    target_role: "साक्षात्कार नौकरी लक्ष्य",
+    languages_known: "भाषाएं और प्रौद्योगिकियां ज्ञात",
+    projects_input_placeholder: "जैसे: JavaScript, Python, React, HTML/CSS",
+    generate_ideas: "प्रोजेक्ट विचार उत्पन्न करें",
+    recommended_projects: "अनुशंसित परियोजनाएं",
+    designing_projects_loading: "अनुकूलित परियोजनाओं को डिजाइन करना और ट्यूटोरियल ढूंढना...",
+    watch_tutorials: "ट्यूटोरियल देखें",
+    benefits_title: "UpSkill के लाभ",
+    benefit_1: "व्यक्तिगत करियर मार्गदर्शन",
+    benefit_2: "कौशल अंतराल की पहचान",
+    benefit_3: "क्यूरेटेड संसाधनों के साथ तेज गति से सीखना",
+    benefit_4: "साक्षात्कार प्रदर्शन में सुधार",
+    benefit_5: "बेहतर रिज्यूमे गुणवत्ता और एटीएस स्कोर",
+    benefit_6: "इंटर्नशिप और नौकरियों तक पहुंच",
+    benefit_7: "सरकारी अवसरों के बारे में जागरूकता",
+    benefit_8: "मजबूत प्रोजेक्ट पोर्टफोलियो",
+    benefit_9: "पूर्ण करियर विकास के लिए एक मंच"
   },
   te: {
     dashboard_title: "డాష్‌బోర్డ్",
@@ -473,7 +519,28 @@ const translations = {
     begin_simulation: "AI సిమ్యులేషన్ ప్రారంభించండి",
     type_response: "మీ సమాధానాన్ని టైప్ చేయండి లేదా మాట్లాడటానికి మైక్రోఫోన్‌ను క్లిక్ చేయండి...",
     ask_question_placeholder: "మీ ప్రశ్నను ఇక్కడ టైప్ చేయండి...",
-    send: "పంపు"
+    send: "పంపు",
+    brand_slogan: "నేటి అభ్యాసం నుండి రేపటి నాయకత్వం వరకు.",
+    nav_projects: "ప్రాజెక్ట్ హబ్",
+    projects_title: "AI ప్రాజెక్ట్ ప్లానర్",
+    projects_subtitle: "మీ లక్ష్య ఉద్యోగ పాత్ర మరియు మీకు ఇప్పటికే తెలిసిన భాషల ఆధారంగా వ్యక్తిగతీకరించిన ప్రాజెక్ట్ ఆలోచనలను పొందండి.",
+    target_role: "ఉద్యోగ లక్ష్యం",
+    languages_known: "తెలిసిన భాషలు & సాంకేతికతలు",
+    projects_input_placeholder: "ఉదా: JavaScript, Python, React, HTML/CSS",
+    generate_ideas: "ప్రాజెక్ట్ ఆలోచనలను సృష్టించండి",
+    recommended_projects: "సిఫార్సు చేయబడిన ప్రాజెక్ట్‌లు",
+    designing_projects_loading: "తగిన ప్రాజెక్ట్‌లను రూపొందించడం మరియు ట్యుటోరియల్‌లను కనుగొనడం...",
+    watch_tutorials: "ట్యుటోరియల్స్ చూడండి",
+    benefits_title: "UpSkill యొక్క ప్రయోజనాలు",
+    benefit_1: "వ్యక్తిగతీకరించిన కెరీర్ మార్గదర్శకత్వం",
+    benefit_2: "నైపుణ్యాల లోపాలను గుర్తించడం",
+    benefit_3: "క్యూరేటెడ్ వనరులతో వేగంగా నేర్చుకోవడం",
+    benefit_4: "మెరుగైన ఇంటర్వ్యూ ప్రదర్శన",
+    benefit_5: "మెరుగైన రెజ్యూమే నాణ్యత మరియు ATS స్కోర్",
+    benefit_6: "ఇంటర్న్‌షిప్‌లు మరియు ఉద్యోగాలకు ప్రాప్యత",
+    benefit_7: "ప్రభుత్వ అవకాశాలపై అవగాహన",
+    benefit_8: "బలమైన ప్రాజెక్ట్ పోర్ట్‌ఫోలియో",
+    benefit_9: "పూర్తి కెరీర్ అభివృద్ధి కోసం ఒకే వేదిక"
   }
 };
 
@@ -1695,6 +1762,12 @@ window.addEventListener("DOMContentLoaded", () => {
     cardInterview.addEventListener("click", () => showView("interview"));
   }
 
+  // Wire Project Hub button handler
+  const btnRecommendProjects = document.getElementById("btn-recommend-projects");
+  if (btnRecommendProjects) {
+    btnRecommendProjects.addEventListener("click", handleRecommendProjects);
+  }
+
   const activeUser = sessionStorage.getItem("upskill_active_user");
   if (activeUser) {
     currentUser = JSON.parse(activeUser);
@@ -1703,3 +1776,129 @@ window.addEventListener("DOMContentLoaded", () => {
     showView("login"); // Directs to auth view
   }
 });
+
+// ==========================================
+// AI PROJECT HUB — RECOMMENDATIONS ENGINE
+// ==========================================
+
+async function handleRecommendProjects() {
+  const roleInput = document.getElementById("projects-role");
+  const languagesInput = document.getElementById("projects-languages");
+  const loadingEl = document.getElementById("projects-loading");
+  const resultsEl = document.getElementById("projects-results-container");
+  const gridEl = document.getElementById("projects-list-grid");
+  const selectedRoleEl = document.getElementById("projects-selected-role");
+
+  const role = roleInput ? roleInput.value.trim() : "";
+  const languages = languagesInput ? languagesInput.value.trim() : "";
+
+  const dict = translations[currentLanguage] || translations["en"];
+
+  if (!languages) {
+    showToast(
+      currentLanguage === "hi"
+        ? "कृपया भाषाएं और प्रौद्योगिकियां दर्ज करें"
+        : currentLanguage === "te"
+        ? "దయచేసి భాషలు మరియు సాంకేతికతలను నమోదు చేయండి"
+        : "Please enter at least one language or technology",
+      "error"
+    );
+    return;
+  }
+
+  // Show loading state
+  if (loadingEl) loadingEl.style.display = "flex";
+  if (resultsEl) resultsEl.style.display = "none";
+  if (gridEl) gridEl.innerHTML = "";
+
+  try {
+    const data = await callServerAPI("/api/recommend-projects", { role, languages });
+
+    if (!data.projects || !Array.isArray(data.projects) || data.projects.length === 0) {
+      throw new Error("No projects returned from server.");
+    }
+
+    // Populate role label
+    if (selectedRoleEl) selectedRoleEl.innerText = role;
+
+    // Build project cards
+    gridEl.innerHTML = "";
+    data.projects.forEach((project, index) => {
+      const card = buildProjectCard(project, index, dict);
+      gridEl.appendChild(card);
+    });
+
+    // Show results
+    if (loadingEl) loadingEl.style.display = "none";
+    if (resultsEl) {
+      resultsEl.style.display = "block";
+      resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    showToast(
+      currentLanguage === "hi"
+        ? "प्रोजेक्ट सफलतापूर्वक उत्पन्न हुए!"
+        : currentLanguage === "te"
+        ? "ప్రాజెక్ట్‌లు విజయవంతంగా రూపొందించబడ్డాయి!"
+        : "Projects generated successfully!",
+      "success"
+    );
+  } catch (err) {
+    if (loadingEl) loadingEl.style.display = "none";
+    console.error("Project Hub error:", err);
+    showToast(
+      currentLanguage === "hi"
+        ? "प्रोजेक्ट प्राप्त करने में त्रुटि। पुनः प्रयास करें।"
+        : currentLanguage === "te"
+        ? "ప్రాజెక్ట్‌లు పొందడంలో లోపం. మళ్ళీ ప్రయత్నించండి."
+        : "Error fetching projects. Please try again.",
+      "error"
+    );
+  }
+}
+
+function buildProjectCard(project, index, dict) {
+  const difficultyColors = {
+    Beginner: "#22c55e",
+    Intermediate: "#f59e0b",
+    Advanced: "#ef4444",
+    // Hindi variants
+    "शुरुआती": "#22c55e",
+    "मध्यम": "#f59e0b",
+    "उन्नत": "#ef4444",
+    // Telugu variants
+    "ప్రారంభకుడు": "#22c55e",
+    "మధ్యస్థం": "#f59e0b",
+    "అధునాతన": "#ef4444",
+  };
+
+  const diffColor = difficultyColors[project.difficulty] || "#6366f1";
+  const searchQuery = encodeURIComponent((project.searchQuery || project.title) + " tutorial");
+  const ytLink = `https://www.youtube.com/results?search_query=${searchQuery}`;
+
+  const techTags = Array.isArray(project.techStack)
+    ? project.techStack.map(tag => `<span class="tech-tag">${tag}</span>`).join("")
+    : "";
+
+  const animDelay = index * 0.12;
+
+  const card = document.createElement("div");
+  card.className = "project-card glass";
+  card.style.cssText = `animation: fadeInUp 0.5s ease ${animDelay}s both;`;
+  card.innerHTML = `
+    <div class="project-card-header">
+      <span class="project-index">#${String(index + 1).padStart(2, "0")}</span>
+      <span class="project-difficulty-badge" style="background: ${diffColor}22; color: ${diffColor}; border: 1px solid ${diffColor}55;">
+        ${project.difficulty || "Intermediate"}
+      </span>
+    </div>
+    <h3 class="project-title">${project.title || "Project"}</h3>
+    <p class="project-description">${project.description || ""}</p>
+    <div class="project-tech-tags">${techTags}</div>
+    <a href="${ytLink}" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">
+      <i class="fa-brands fa-youtube"></i>
+      <span data-translate="watch_tutorials">${dict["watch_tutorials"] || "Watch Tutorials"}</span>
+    </a>
+  `;
+  return card;
+}
